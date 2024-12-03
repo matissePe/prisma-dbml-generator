@@ -1,9 +1,9 @@
 import { DBMLKeywords, PrismaScalars } from './../keywords';
-import { DMMF } from '@prisma/generator-helper';
+import { DMMF, ReadonlyDeep } from '@prisma/generator-helper';
 import { getModelByType } from './model';
 
 export function generateTables(
-  models: DMMF.Model[],
+  models: ReadonlyDeep<DMMF.Model[]>,
   mapToDbSchema: boolean = false,
   includeRelationFields: boolean = true,
 ): string[] {
@@ -40,11 +40,11 @@ const generateTableIndexes = (model: DMMF.Model): string => {
     : '';
 };
 
-const hasCompositeUniqueIndices = (uniqueFields: string[][]): boolean => {
+const hasCompositeUniqueIndices = (uniqueFields: ReadonlyDeep<ReadonlyDeep<string[]>[]>): boolean => {
   return uniqueFields.filter((composite) => composite.length > 1).length > 0;
 };
 
-const generateTableBlockId = (primaryFields: string[] | undefined): string => {
+const generateTableBlockId = (primaryFields: ReadonlyDeep<string[]> | undefined): string => {
   if (primaryFields === undefined || primaryFields.length === 0) {
     return '';
   }
@@ -52,7 +52,7 @@ const generateTableBlockId = (primaryFields: string[] | undefined): string => {
 };
 
 const generateTableCompositeUniqueIndex = (
-  uniqueFields: string[][],
+  uniqueFields: ReadonlyDeep<ReadonlyDeep<string[]>[]>,
 ): string => {
   return uniqueFields
     .filter((composite) => composite.length > 1)
@@ -68,8 +68,8 @@ const generateTableDocumentation = (model: DMMF.Model): string => {
 };
 
 const generateFields = (
-  fields: DMMF.Field[],
-  models: DMMF.Model[],
+  fields: ReadonlyDeep<DMMF.Field[]>,
+  models: ReadonlyDeep<DMMF.Model[]>,
   mapToDbSchema: boolean = false,
   includeRelationFields: boolean = true,
 ): string => {

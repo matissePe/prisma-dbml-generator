@@ -1,4 +1,4 @@
-import { DMMF } from '@prisma/generator-helper';
+import { DMMF, ReadonlyDeep } from '@prisma/generator-helper';
 import { getModelByType } from './model';
 
 export const oneToOne = '-';
@@ -6,7 +6,7 @@ export const oneToMany = '<';
 export const manyToOne = '>';
 
 export function generateRelations(
-  models: DMMF.Model[],
+  models: ReadonlyDeep<DMMF.Model[]>,
   mapToDbSchema: boolean = false,
 ): string[] {
   const refs: string[] = [];
@@ -54,7 +54,7 @@ export function generateRelations(
 }
 
 const getRelationOperator = (
-  models: DMMF.Model[],
+  models: ReadonlyDeep<DMMF.Model[]>,
   from: string,
   to: string,
 ): string => {
@@ -65,12 +65,12 @@ const getRelationOperator = (
 
 // Composite foreign keys:
 // Ref: merchant_periods.(merchant_id, country_code) > merchants.(id, country_code)
-const combineKeys = (keys: string[]): string => {
+const combineKeys = (keys: Readonly<string[]>): string => {
   return keys.length > 1 ? `(${keys.join(', ')})` : keys[0];
 };
 
 const getReferentialActions = (
-  models: DMMF.Model[],
+  models: ReadonlyDeep<DMMF.Model[]>,
   from: string,
   to: string,
 ): string => {

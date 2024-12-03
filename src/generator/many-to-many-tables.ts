@@ -1,8 +1,8 @@
 import { getModelByType } from './model';
-import { DMMF } from '@prisma/generator-helper';
+import { DMMF, ReadonlyDeep } from '@prisma/generator-helper';
 
 export function generateManyToManyTables(
-  models: DMMF.Model[],
+  models: ReadonlyDeep<DMMF.Model[]>,
   mapToDbSchema: boolean = false,
 ): string[] {
   const manyToManyFields = filterManyToManyRelationFields(models);
@@ -14,7 +14,7 @@ export function generateManyToManyTables(
 
 function generateTables(
   manyToManyFields: DMMF.Field[],
-  models: DMMF.Model[],
+  models: ReadonlyDeep<DMMF.Model[]>,
   manyToManyTables: string[] = [],
   mapToDbSchema: boolean = false,
 ): string[] {
@@ -54,7 +54,7 @@ function generateTables(
 
 function generateJoinFields(
   fields: [DMMF.Field, DMMF.Field],
-  models: DMMF.Model[],
+  models: ReadonlyDeep<DMMF.Model[]>,
   mapToDbSchema: boolean = false,
 ): string {
   return fields
@@ -64,7 +64,7 @@ function generateJoinFields(
 
 function joinField(
   field: DMMF.Field,
-  models: DMMF.Model[],
+  models: ReadonlyDeep<DMMF.Model[]>,
   mapToDbSchema: boolean = false,
 ): string {
   const fieldName = mapToDbSchema
@@ -77,7 +77,7 @@ function joinField(
   )} [ref: > ${fieldName}.${field.relationToFields![0]}]`;
 }
 
-function getJoinIdType(joinField: DMMF.Field, models: DMMF.Model[]): string {
+function getJoinIdType(joinField: DMMF.Field, models: ReadonlyDeep<DMMF.Model[]>): string {
   const joinIdField = models
     .filter((model) => model.name === joinField.type)
     .map(
@@ -90,7 +90,7 @@ function getJoinIdType(joinField: DMMF.Field, models: DMMF.Model[]): string {
   return joinIdField.type;
 }
 
-function filterManyToManyRelationFields(models: DMMF.Model[]): DMMF.Field[] {
+function filterManyToManyRelationFields(models: ReadonlyDeep<DMMF.Model[]>): DMMF.Field[] {
   return models
     .map((model) =>
       model.fields

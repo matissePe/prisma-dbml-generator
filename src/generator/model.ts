@@ -1,7 +1,7 @@
-import { DMMF } from '@prisma/generator-helper';
+import { DMMF, ReadonlyDeep } from '@prisma/generator-helper';
 
 export const getModelByType = (
-  models: DMMF.Model[],
+  models: ReadonlyDeep<DMMF.Model[]>,
   type: string,
 ): DMMF.Model | undefined => {
   return models.find((model) => model.name === type);
